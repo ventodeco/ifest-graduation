@@ -394,8 +394,11 @@
               </div>
               <div class="modal-body" style="padding: 2rem; padding-top: 0; padding-bottom: 0">
                 <ul class="navbar-nav responsive me-auto mt-2 mt-lg-0">
-                  <li class="nav-item active">
+                  <li class="nav-item {% if (data['selected'] == 'index') %} active {% endif %}">
                     <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                  </li>
+                  <li class="nav-item {% if (data['selected'] == 'graduation') %} active {% endif %}">
+                    <a class="nav-link" href="{{ url_for('graduation.index') }}">Prediksi Kelulusan</a>
                   </li>
                 </ul>
               </div>
