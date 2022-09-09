@@ -1,0 +1,573 @@
+{% include 'layouts/header.html' %}
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+  
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    body {
+      background-color: #333;
+    }
+  
+    .container {
+      background-color: #27c499;
+      color: #fff;
+      border-radius: 10px;
+      padding: 20px -1px;
+      font-family: "Montserrat", sans-serif;
+      /* max-width: 60vh; */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* text-align: -webkit-center; */
+      text-align: center;
+    }
+  
+    .container > p {
+      font-size: 32px;
+    }
+  
+    .question {
+      border-top: 5px solid;
+      /* border-bottom: 5px solid; */
+      margin-bottom: 2vh;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .options {
+      position: relative;
+      padding-left: 40px;
+      top: 8px;
+    }
+  
+    #options label {
+      display: block;
+      margin-bottom: 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  
+    .options input {
+      opacity: 0;
+    }
+  
+    .checkmark {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      background-color: #e8b8b8;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+    }
+  
+    .options input:checked ~ .checkmark:after {
+      display: block;
+    }
+  
+    .options .checkmark:after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      display: block;
+      background: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: 300ms ease-in-out 0s;
+    }
+  
+    .options input[type="radio"]:checked ~ .checkmark {
+      background: #555;
+      transition: 300ms ease-in-out 0s;
+    }
+  
+    .options input[type="radio"]:checked ~ .checkmark:after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  
+    .btn-primary {
+      background-color: #555;
+      color: #ddd;
+      border: 1px solid #ddd;
+    }
+  
+    .btn-primary:hover {
+      background-color: #21bf73;
+      border: 1px solid #21bf73;
+    }
+  
+    .btn-success {
+      padding: 5px 25px;
+      background-color: #21bf73;
+    }
+  
+    .baru {
+      background-color: white;
+      border-radius: 10px;
+      margin: 10px;
+      padding: 10px;
+      color: black;
+      width: 50%;
+      margin-left: 7vh;
+    }
+  
+    .quest {
+      width: 70%;
+    }
+  
+    .submisi {
+      width: 50%;
+      margin: 2%;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 0 10px 0;
+    }
+  
+    .submisi:hover {
+      background-color: #a8eeb7;
+      color: #fff;
+      font-weight: bold;
+    }
+  
+    .ppp {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+    }
+  
+    @media (min-width: 900px) {
+      .container {
+        background-color: #27c499;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px -1px;
+        font-family: "Montserrat", sans-serif;
+        max-width: 80vh;
+      }
+    }
+  
+    @media (min-width: 800px) {
+      .container {
+        background-color: #27c499;
+        color: #fff;
+        border-radius: 10px;
+        padding: 20px -1px;
+        font-family: "Montserrat", sans-serif;
+        max-width: 75vh;
+      }
+      .question {
+        /* width: 100%; */
+        word-spacing: 2px;
+        /* margin-left: 21%; */
+      }
+      .ppp {
+        width: 110%;
+      }
+      .submisi {
+        width: 50%;
+      }
+    }
+  
+    @media (min-width: 600px) {
+      .container {
+        max-width: 100vh;
+      }
+      .ppp {
+        width: 108%;
+      }
+      .question {
+        width: 100%;
+      }
+    }
+  
+    @media (max-width: 550px) {
+      .ppp {
+        width: 108%;
+      }
+    }
+</style>
+<section class="h-100 w-100 bg-white" style="box-sizing: border-box">
+    <div
+      class="content-2-2 container-xxl mx-auto p-0 position-relative"
+      style="font-family: 'Poppins', sans-serif"
+    >
+        <div class="container mt-sm-5 my-1">
+            <form
+            action="{{ url_for('graduation.predict_graduation_page') }}"
+            method="POST"
+            style="min-width: 100vh; margin: 20px 0 20px 0"
+            >
+                <!-- Gender -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Jenis kelaminmu apa?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Wanita
+                            <input
+                            type="radio"
+                            name="Gender"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Pria
+                            <input
+                            type="radio"
+                            name="Gender"
+                            value="1"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tinggal_Dengan -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Sekarang kamu tinggal dengan siapa?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Orang Tua
+                            <input
+                            type="radio"
+                            name="Tinggal_Dengan"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Kos
+                            <input
+                                type="radio" 
+                                name="Tinggal_Dengan" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Status_Kerja -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Apakah kamu sudah bekerja?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Belum
+                            <input
+                            type="radio"
+                            name="Status_Kerja"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Bekerja
+                            <input
+                                type="radio" 
+                                name="Status_Kerja" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Biaya -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Biaya kuliahmu di cover siapa?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Orang Tua
+                            <input
+                            type="radio"
+                            name="Biaya"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Beasiswa
+                            <input
+                                type="radio" 
+                                name="Biaya" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Alamat -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Dimana tepatnya kamu tinggal?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Bekasi
+                            <input
+                            type="radio"
+                            name="Alamat"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Bogor
+                            <input
+                                type="radio" 
+                                name="Alamat" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Jakarta
+                            <input
+                            type="radio"
+                            name="Alamat"
+                            value="2"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Karawang
+                            <input
+                                type="radio" 
+                                name="Alamat" 
+                                value="3" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Serang
+                            <input
+                            type="radio"
+                            name="Alamat"
+                            value="4"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Tangerang
+                            <input
+                                type="radio" 
+                                name="Alamat" 
+                                value="5" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- UKM -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Apakah kamu mengikuti UKM? Apa itu?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Tidak
+                            <input
+                            type="radio"
+                            name="UKM"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Olahraga
+                            <input
+                                type="radio" 
+                                name="UKM" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Seni
+                            <input
+                            type="radio"
+                            name="UKM"
+                            value="2"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Kewirausahaan
+                            <input
+                                type="radio" 
+                                name="UKM" 
+                                value="3" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Keilmuan
+                            <input
+                            type="radio"
+                            name="UKM"
+                            value="4"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Organisasi_Kampus -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Apakah kamu mengikuti organisasi kampus?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >Tidak
+                            <input
+                            type="radio"
+                            name="Organisasi_Kampus"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >Ya
+                            <input
+                                type="radio" 
+                                name="Organisasi_Kampus" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Fakultas -->
+                <div class="question ml-sm-5 pl-sm-5 pt-2">
+                    <div class="py-2 h5 quest">
+                        <b>Darimana asal fakultasmu?</b>
+                    </div>
+                    <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3 baru" id="options">
+                        <label class="options"
+                            >DKV
+                            <input
+                            type="radio"
+                            name="Fakultas"
+                            value="0"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >FIKOM
+                            <input
+                                type="radio" 
+                                name="Fakultas" 
+                                value="1" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >FISIP
+                            <input
+                            type="radio"
+                            name="Fakultas"
+                            value="2"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >FT
+                            <input
+                                type="radio" 
+                                name="Fakultas" 
+                                value="3" 
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="options"
+                            >FTI
+                            <input
+                            type="radio"
+                            name="Fakultas"
+                            value="4"
+                            required="required"
+                            oninvalid="this.setCustomValidity('Terdapat bagian yang belum terpilih')"
+                            oninput="this.setCustomValidity('')"
+                            />
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row p-2 ppp">
+                    <input type="submit" value="Prediksi" class="submisi" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% include 'layouts/footer.html' %}

@@ -1,0 +1,118 @@
+{% include 'layouts/header.html' %}
+<div style="margin-bottom: 6vh;">
+    <!-- <div style="width: 500px; height: 500px; display: block; margin: 0 auto"> -->
+    <div>
+      <canvas id="pieData"></canvas>
+    </div>
+
+    <div>
+        <h2>{{data['labels']}}</h2>
+        <h2>{{data['labels'][0]}}</h2>
+        <h2>{{data['scores']}}</h2>
+        <h2>{{data['scores'][0]}}</h2>
+    </div>
+
+    <input
+      id="cryptography"
+      value="{{ data['scores'][0] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="cyber_security"
+      value="{{ data['scores'][1] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="social"
+      value="{{ data['scores'][2] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="statistics"
+      value="{{ data['scores'][3] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="devops"
+      value="{{ data['scores'][4] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="physics"
+      value="{{ data['scores'][5] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="ai_ml"
+      value="{{ data['scores'][6] }}"
+      type="text"
+      hidden
+    />
+    <input
+      id="mathematics"
+      value="{{ data['scores'][7] }}"
+      type="text"
+      hidden
+    />
+
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+<script>
+  const cryptography = document.getElementById("cryptography").value;
+  const cyber_security = document.getElementById("cyber_security").value;
+  const social = document.getElementById("social").value;
+  const statistics = document.getElementById("statistics").value;
+  const devops = document.getElementById("devops").value;
+  const physics = document.getElementById("physics").value;
+  const ai_ml = document.getElementById("ai_ml").value;
+  const mathematics = document.getElementById("mathematics").value;
+//   console.log(cryptography)
+  
+  var coba = document.getElementById("pieData");
+
+    const data = {
+        labels: [
+            "Cryptography",
+            "Cyber Security",
+            "Social",
+            "Statistics",
+            "DevOps",
+            "Physics",
+            "AI/ML",
+            "Mathematics",
+        ],
+        datasets: [{
+            label: 'Paper Topic Prediciton',
+            data: [cryptography, cyber_security, social, statistics, devops, physics, ai_ml, mathematics],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    var pieChart = new Chart(coba, {
+        type: 'pie',
+        data: data
+    });
+
+    // var pieChart = new Chart(coba, {
+    //     type: 'pie',
+    //     data: data
+    // });
+</script>
+{% include 'layouts/footer.html' %}
